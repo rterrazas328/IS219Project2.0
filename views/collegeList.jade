@@ -1,0 +1,7 @@
+extends generalLayout
+
+block content
+	h1 Colleges
+	ul
+		for college in resultSet
+			li: a(href='/college/' + college._id)= college.INSTNM

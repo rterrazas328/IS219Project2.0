@@ -1,0 +1,15 @@
+extends generalLayout
+
+block content
+
+	h1 College Record
+
+	table
+		thead
+		tbody
+			tr
+				each val, k in resObj2
+					th=k
+			tr
+				each val, k in resObj2
+					td=val
