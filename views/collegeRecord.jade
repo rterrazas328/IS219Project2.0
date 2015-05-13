@@ -1,15 +1,14 @@
 extends generalLayout
 
 block content
-
 	h1 College Record
 
-	table
+	table(class='table-bordered')
 		thead
-		tbody
 			tr
 				each val, k in resObj2
 					th=k
+		tbody
 			tr
 				each val, k in resObj2
 					td=val

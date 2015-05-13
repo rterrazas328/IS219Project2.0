@@ -1,0 +1,7 @@
+extends generalLayout
+
+block content
+	h1 Select a college to view its change in tuition
+	ul
+		for college in resultSet
+			li: a(href='/question3/' + college.UNITID)= college.INSTNM

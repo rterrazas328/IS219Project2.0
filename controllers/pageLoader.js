@@ -17,6 +17,10 @@ var CollegeList = mongoose.model('college');
 var CollegeRecord = mongoose.model('record');
 var CollegeLookup = mongoose.model('lookup');
 
+var EnrollmentDataSet = mongoose.model('enrolled');
+var MFDataSet = mongoose.model('male_female');
+var TuitionDataSet = mongoose.model('tuition');
+
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
   console.log("Successfully connected to MongoDB");// yay!
@@ -75,7 +79,7 @@ exports.loadDownloadForm = function(req, res, next) {
 	else{
 		console.log("files not null!");
 		var filePath = req.files.csvFile.path;
-		var collectionName = "collegeVarDetails";
+		var collectionName = "tuition";//edit collegeVarDetails, enrollment
 
 		importAndParseFile(filePath, collectionName);
 		res.render('uploadConfirm', {});
@@ -120,3 +124,56 @@ exports.loadRecord = function(req, res, next) {
 
 	});//*/
 }
+//just renders the jade view which contains script
+exports.loadQuestionForm1 = function(req, res, next) {
+	res.render('question1', {});
+}//*/
+
+//loads data into ajax response to be loaded into the graph
+exports.loadQuestionData1 = function(req, res, next){
+	EnrollmentDataSet.find({}, function(err, resultArr){
+
+		resultArr.sort(function(a,b){
+			return b['Grand total'] - a['Grand total'];
+		});
+
+		var topTen = [];
+		for (var i=0; i<10; i++){
+			topTen[i] = resultArr[i];
+		}
+
+		res.send(topTen);
+	});
+}
+
+exports.loadQuestionForm2 = function (req, res, next) {
+	res.render('question2', { collegeID : req.params.cid});
+}//*/
+
+exports.loadQuestionData2 = function(req, res, next){
+	MFDataSet.findOne({ unitid : req.params.cid }, function (err, recObj) {
+		res.send(recObj);
+	});
+}
+
+exports.loadQuestionForm3 = function(req, res, next) {
+	res.render('question3', { collegeID : req.params.cid});
+}//*/
+
+exports.loadQuestionData3 = function(req, res, next){
+	TuitionDataSet.findOne({ unitid : req.params.cid}, function (err, recObj){
+		console.log(recObj);
+		res.send(recObj);
+	});
+}
+
+exports.loadQuestionForm2List = function(req, res, next){
+	CollegeList.find({}, function(err, resultsArr){
+		res.render('question2List', { resultSet: resultsArr});
+	});
+}
+exports.loadQuestionForm3List = function(req, res, next) {
+	CollegeList.find({}, function(err, resultsArr){
+		res.render('question3List', { resultSet: resultsArr});
+	});
+}//*/
