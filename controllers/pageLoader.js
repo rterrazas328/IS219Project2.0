@@ -4,6 +4,11 @@ var eventEmitter = new events.EventEmitter;
 var csv = require('csv');
 var fs = require('fs');
 require('../models/CollegeList');
+var cacheOpts = {
+	max:50,
+	maxAge:1000*60*2
+};
+require('mongoose-cache').install(mongoose, cacheOpts);
 
 var records = new Array();
 var records = [];
@@ -57,10 +62,9 @@ function importAndParseFile(fnPath, collName){
 }
 
 exports.loadIndexPage = function(req, res, next) {
-	
 	CollegeList.find({}, function(err, resultsArr){
 		res.render('collegeList', { resultSet: resultsArr});
-	});
+	}).cache();
 	
 }
 //Display Form to upload csv

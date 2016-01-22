@@ -2,13 +2,16 @@ extends generalLayout
 
 block content
 	h1 College Record
-
-	table(class='table-bordered')
-		thead
-			tr
-				each val, k in resObj2
-					th=k
-		tbody
-			tr
-				each val, k in resObj2
-					td=val
+	.container-fluid
+		.row
+			.col-md-12
+				.table-responsive
+					table(class='table table-striped table-bordered')
+						thead
+							tr
+								each val, k in resObj2
+									th=k
+						tbody
+							tr
+								each val, k in resObj2
+									td=val

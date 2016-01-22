@@ -1,26 +1,55 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'node', '/usr/local/bin/npm', 'start' ]
+1 verbose cli [ 'node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'https://github.com/Gottox/mongoose-cache.git' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.34
-4 verbose run-script [ 'prestart', 'start', 'poststart' ]
-5 info prestart Project1@0.0.0
-6 info start Project1@0.0.0
-7 verbose unsafe-perm in lifecycle true
-8 info Project1@0.0.0 Failed to exec start script
-9 error Project1@0.0.0 start: `node ./bin/www`
-9 error Exit status 8
-10 error Failed at the Project1@0.0.0 start script.
-10 error This is most likely a problem with the Project1 package,
-10 error not with npm itself.
-10 error Tell the author that this fails on your system:
-10 error     node ./bin/www
-10 error You can get their info via:
-10 error     npm owner ls Project1
-10 error There is likely additional logging output above.
-11 error System Darwin 14.1.0
-12 error command "node" "/usr/local/bin/npm" "start"
-13 error cwd /Users/Ricardo/Documents/NJIT Documents/IS 219/Project1
-14 error node -v v0.10.34
-15 error npm -v 1.4.28
-16 error code ELIFECYCLE
-17 verbose exit [ 1, true ]
+4 verbose readDependencies using package.json deps
+5 verbose cache add [ 'https://github.com/Gottox/mongoose-cache.git', null ]
+6 verbose cache add name=undefined spec="https://github.com/Gottox/mongoose-cache.git" args=["https://github.com/Gottox/mongoose-cache.git",null]
+7 verbose parsed url { protocol: 'https:',
+7 verbose parsed url   slashes: true,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: 'github.com',
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: 'github.com',
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: '/Gottox/mongoose-cache.git',
+7 verbose parsed url   path: '/Gottox/mongoose-cache.git',
+7 verbose parsed url   href: 'https://github.com/Gottox/mongoose-cache.git' }
+8 silly lockFile d70dab77-ub-com-Gottox-mongoose-cache-git https://github.com/Gottox/mongoose-cache.git
+9 verbose lock https://github.com/Gottox/mongoose-cache.git /Users/Ricardo/.npm/d70dab77-ub-com-Gottox-mongoose-cache-git.lock
+10 verbose addRemoteTarball [ 'https://github.com/Gottox/mongoose-cache.git', null ]
+11 info retry fetch attempt 1 at 04:49:31
+12 verbose fetch to= /tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
+13 http GET https://github.com/Gottox/mongoose-cache.git
+14 http 200 https://github.com/Gottox/mongoose-cache.git
+15 verbose tar unpack /tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
+16 silly lockFile 7943bbb3-Gottox-mongoose-cache-git-unpack tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack
+17 verbose lock tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack /Users/Ricardo/.npm/7943bbb3-Gottox-mongoose-cache-git-unpack.lock
+18 silly lockFile 0b12ac2e-ub-com-Gottox-mongoose-cache-git tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
+19 verbose lock tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git /Users/Ricardo/.npm/0b12ac2e-ub-com-Gottox-mongoose-cache-git.lock
+20 silly gunzTarPerm modes [ '755', '644' ]
+21 error not a package /tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
+22 silly lockFile 7943bbb3-Gottox-mongoose-cache-git-unpack tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack
+23 silly lockFile 7943bbb3-Gottox-mongoose-cache-git-unpack tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack
+24 silly lockFile 0b12ac2e-ub-com-Gottox-mongoose-cache-git tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
+25 silly lockFile 0b12ac2e-ub-com-Gottox-mongoose-cache-git tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
+26 silly lockFile d70dab77-ub-com-Gottox-mongoose-cache-git https://github.com/Gottox/mongoose-cache.git
+27 silly lockFile d70dab77-ub-com-Gottox-mongoose-cache-git https://github.com/Gottox/mongoose-cache.git
+28 error Error: ENOENT, open '/tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack/package.json'
+29 error If you need help, you may report this *entire* log,
+29 error including the npm and node versions, at:
+29 error     <http://github.com/npm/npm/issues>
+30 error System Darwin 14.5.0
+31 error command "node" "/usr/local/bin/npm" "install" "https://github.com/Gottox/mongoose-cache.git"
+32 error cwd /Users/Ricardo/Documents/Ricardo/IS 219/Project1
+33 error node -v v0.10.34
+34 error npm -v 1.4.28
+35 error path /tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack/package.json
+36 error code ENOENT
+37 error errno 34
+38 verbose exit [ 34, true ]
