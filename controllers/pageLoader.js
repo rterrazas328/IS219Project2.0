@@ -14,7 +14,7 @@ var records = new Array();
 var records = [];
 
 //Connect to mongoDB
-mongoose.connect('mongodb://localhost:27017/IS219');
+mongoose.connect('mongodb://heroku_9dlrrxv3:2v9f48c2rq5lunt1dilf9em2gn@ds057254.mongolab.com:57254/heroku_9dlrrxv3');
 var db = mongoose.connection;
 
 console.log("loading models...");
@@ -43,7 +43,7 @@ function importAndParseFile(fnPath, collName){
    }).on('end', function (count) {
       var MongoClient = require('mongodb').MongoClient;
       // Connect to the db
-      MongoClient.connect("mongodb://localhost:27017/IS219", function (err, db) {
+      MongoClient.connect("mongodb://heroku_9dlrrxv3:2v9f48c2rq5lunt1dilf9em2gn@ds057254.mongolab.com:57254/heroku_9dlrrxv3", function (err, db) {
       	if(err){
       		console.log("Error! " + err);
       	}

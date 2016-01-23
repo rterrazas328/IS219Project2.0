@@ -7,7 +7,7 @@ var loader = require('../controllers/pageLoader');
 router.get('/', loader.loadIndexPage);
 router.get('/college/:cid', loader.loadRecord);
 router.get('/upload',  loader.loadUploadPage);
-router.post('/upload', loader.loadDownloadForm);
+//router.post('/upload', loader.loadDownloadForm);
 //questions
 router.get('/question1', loader.loadQuestionForm1);
 router.get('/question2', loader.loadQuestionForm2List);
