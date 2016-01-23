@@ -3,7 +3,7 @@ var events = require('events');
 var eventEmitter = new events.EventEmitter;
 var csv = require('csv');
 var fs = require('fs');
-var mand = require('../models/CollegeList');
+require('../models/collegeList');
 /*var cacheOpts = {
 	max:50,
 	maxAge:1000*60*2
