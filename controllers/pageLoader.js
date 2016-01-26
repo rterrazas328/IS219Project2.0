@@ -166,7 +166,7 @@ exports.loadQuestionForm3 = function(req, res, next) {
 
 exports.loadQuestionData3 = function(req, res, next){
 	TuitionDataSet.findOne({ unitid : req.params.cid}, function (err, recObj){
-		console.log(recObj);
+		//console.log(recObj);
 		res.send(recObj);
 	});
 }
