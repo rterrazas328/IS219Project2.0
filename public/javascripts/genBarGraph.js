@@ -2,7 +2,7 @@
 
 $.ajax({
 	type: "GET",
-	url: './questionData1',
+	url: '/questionData1',
 	dataType: 'json'
 
 }).done(function(top10Array) {

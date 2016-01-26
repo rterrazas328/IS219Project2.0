@@ -4,7 +4,7 @@ var c = $('h1').attr('id');
 
 $.ajax({
 	type: "GET",
-	url: './questionData2/' + c,
+	url: '/questionData2/' + c,
 	dataType: 'json'
 
 }).done(function(collObj){
