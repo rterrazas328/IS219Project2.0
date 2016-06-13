@@ -7,15 +7,32 @@ require('../models/collegeList');
 /*var cacheOpts = {
 	max:50,
 	maxAge:1000*60*2
-};
-require('mongoose-cache').install(mongoose, cacheOpts);//*/
+};//*/
+//require('mongoose-cache').install(mongoose, cacheOpts);//*/
+
+var LRU = require("lru-cache");
+var options = { max: 500
+		, length: function (n, key) { return n * 2 + key.length }
+		, dispose: function (key, n) { n.close() }
+		, maxAge: 1000 * 60 * 60 };
+var cache = LRU(options);
 
 var records = new Array();
 var records = [];
+var dbOptions = {
+	user: 'public',
+	pass: 'burrito_c@Nd!_yYz^'
+}
 
 //Connect to mongoDB
-mongoose.connect('mongodb://heroku_9dlrrxv3:2v9f48c2rq5lunt1dilf9em2gn@ds057254.mongolab.com:57254/heroku_9dlrrxv3');
+//mongoose.connect('mongodb://heroku_9dlrrxv3:2v9f48c2rq5lunt1dilf9em2gn@ds057254.mongolab.com:57254/heroku_9dlrrxv3');
+mongoose.connect("mongodb://ricardoterrazas.com:27017/IS219", dbOptions);
+
 var db = mongoose.connection;
+
+//Connect to Redis
+//var redisClient = require('redis').createClient;
+//var redis = redisClient(6379, 'localhost');
 
 console.log("loading models...");
 var CollegeList = mongoose.model('college');
@@ -62,11 +79,59 @@ function importAndParseFile(fnPath, collName){
 }
 
 exports.loadIndexPage = function(req, res, next) {
-	CollegeList.find({}, function(err, resultsArr){
+
+	var hit = cache.get("default");
+
+	if ( hit != undefined){//cache hit
+		var resultsArr = JSON.parse(hit);
+		var collegeList = { resultSet: resultsArr};
+		res.render('collegeList', collegeList);
+	}
+	else{//cache miss
+		CollegeList.find({}, function(err, resultsArr){
+
+			cache.set( "default", JSON.stringify(resultsArr));
+			var collegeList = { resultSet: resultsArr};
+			res.render('collegeList', collegeList);
+		});
+	}
+
+}//*/
+
+/*exports.loadIndexPage = function(req, res, next) {
+	CollegeList.find({}).cache().exec( function(err, resultsArr){
 		res.render('collegeList', { resultSet: resultsArr});
 	});
+
+}//*/
+
+/*exports.loadIndexPage = function(req, res, next) {
+
+	redis.get( "default", function (err, reply) {
+		if (err) {
+			console.log('error');
+			var collegeList = { resultSet: null};
+			res.render('collegeList', collegeList);
+		}
+		else if (reply) { //Book exists in cache
+			console.log('cache hit!');
+			var hit = JSON.parse(reply);
+			var collegeList = { resultSet: hit};
+			res.render('collegeList', collegeList);
+		}
+		else {
+			console.log('cache miss!');
+			CollegeList.find({}, function(err, resultsArr){
+
+				redis.set( "default", JSON.stringify(resultsArr));
+				var collegeList = { resultSet: resultsArr};
+				res.render('collegeList', collegeList);
+			});
+		}
+	});
 	
-}
+}//*/
+
 //Display Form to upload csv
 exports.loadUploadPage = function(req, res, next) {
 	res.render('upload', {});
@@ -93,40 +158,47 @@ exports.loadDownloadForm = function(req, res, next) {
 
 exports.loadRecord = function(req, res, next) {
 
-	CollegeRecord.find({}, function(err, rArray){
+	var hit = cache.get(req.params.cid);
 
-		var queryOptionsString = "";
-		var nameToTitleObject = {};
+	if ( hit != undefined){//cache hit
+		var renderObject = JSON.parse(hit);
+		res.render('collegeRecord', { resObj2 : renderObject});
+	}
+	else{//cache miss
+		CollegeRecord.find({}, function(err, rArray){
 
-		//required loop
-		for (var i=0; i<rArray.length; i++){
+			var queryOptionsString = "";
+			var nameToTitleObject = {};
 
-			//push doc.varname into string
-			queryOptionsString += rArray[i].varname + " ";
-			nameToTitleObject[rArray[i].varname] = rArray[i].varTitle;
-		}
+			//required loop
+			for (var i=0; i<rArray.length; i++){
 
-		//Get rid of space character at end of string
-		var queryOptionsString = queryOptionsString.substring(0,queryOptionsString.length-1);
-
-		//Now have string of varnames [UNITID, INSTNM, ect...] that we will pass to query as options
-		CollegeLookup.findOne({ _id : req.params.cid}, queryOptionsString, {lean: true}, function (err, rec){
-
-			var renderObject = {};
-
-			for (ele in rec){
-				var valueforCurrentDoc = rec[ele];
-				var key = nameToTitleObject[ele];
-				console.log(key + " : " + valueforCurrentDoc);
-				if(valueforCurrentDoc != req.params.cid){
-					renderObject[key] = valueforCurrentDoc;
-				}
+				//push doc.varname into string
+				queryOptionsString += rArray[i].varname + " ";
+				nameToTitleObject[rArray[i].varname] = rArray[i].varTitle;
 			}
 
-			res.render('collegeRecord', { resObj2 : renderObject});
-		});
+			//Get rid of space character at end of string
+			var queryOptionsString = queryOptionsString.substring(0,queryOptionsString.length-1);
 
-	});//*/
+			//Now have string of varnames [UNITID, INSTNM, ect...] that we will pass to query as options
+			CollegeLookup.findOne({ _id : req.params.cid}, queryOptionsString, {lean: true}, function (err, rec){
+
+				var renderObject = {};
+
+				for (ele in rec){
+					var valueforCurrentDoc = rec[ele];
+					var key = nameToTitleObject[ele];
+					//console.log(key + " : " + valueforCurrentDoc);
+					if(valueforCurrentDoc != req.params.cid){
+						renderObject[key] = valueforCurrentDoc;
+					}
+				}
+				cache.set( req.params.cid, JSON.stringify(renderObject));
+				res.render('collegeRecord', { resObj2 : renderObject});
+			});
+		});
+	}//*/
 }
 //just renders the jade view which contains script
 exports.loadQuestionForm1 = function(req, res, next) {
@@ -135,6 +207,24 @@ exports.loadQuestionForm1 = function(req, res, next) {
 
 //loads data into ajax response to be loaded into the graph
 exports.loadQuestionData1 = function(req, res, next){
+
+	var hit = cache.get("default");
+
+	if ( hit != undefined){//cache hit
+		var resultsArr = JSON.parse(hit);
+		var collegeList = { resultSet: resultsArr};
+		res.render('collegeList', collegeList);
+	}
+	else{//cache miss
+		CollegeList.find({}, function(err, resultsArr){
+
+			cache.set( "default", JSON.stringify(resultsArr));
+			var collegeList = { resultSet: resultsArr};
+			res.render('collegeList', collegeList);
+		});
+	}
+
+
 	EnrollmentDataSet.find({}, function(err, resultArr){
 
 		resultArr.sort(function(a,b){
