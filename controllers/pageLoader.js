@@ -4,11 +4,6 @@ var eventEmitter = new events.EventEmitter;
 var csv = require('csv');
 var fs = require('fs');
 require('../models/collegeList');
-/*var cacheOpts = {
-	max:50,
-	maxAge:1000*60*2
-};//*/
-//require('mongoose-cache').install(mongoose, cacheOpts);//*/
 
 var LRU = require("lru-cache");
 var options = { max: 500
@@ -95,13 +90,6 @@ exports.loadIndexPage = function(req, res, next) {
 			res.render('collegeList', collegeList);
 		});
 	}
-
-}//*/
-
-/*exports.loadIndexPage = function(req, res, next) {
-	CollegeList.find({}).cache().exec( function(err, resultsArr){
-		res.render('collegeList', { resultSet: resultsArr});
-	});
 
 }//*/
 
@@ -208,36 +196,27 @@ exports.loadQuestionForm1 = function(req, res, next) {
 //loads data into ajax response to be loaded into the graph
 exports.loadQuestionData1 = function(req, res, next){
 
-	var hit = cache.get("default");
+	var hit = cache.get("top10");
 
 	if ( hit != undefined){//cache hit
-		var resultsArr = JSON.parse(hit);
-		var collegeList = { resultSet: resultsArr};
-		res.render('collegeList', collegeList);
+		var topTen = JSON.parse(hit);
+		res.send(topTen);
 	}
 	else{//cache miss
-		CollegeList.find({}, function(err, resultsArr){
+		EnrollmentDataSet.find({}, function(err, resultArr){
 
-			cache.set( "default", JSON.stringify(resultsArr));
-			var collegeList = { resultSet: resultsArr};
-			res.render('collegeList', collegeList);
+			resultArr.sort(function(a,b){
+				return b['Grand total'] - a['Grand total'];
+			});
+
+			var topTen = [];
+			for (var i=0; i<10; i++){
+				topTen[i] = resultArr[i];
+			}
+			cache.set( "top10", JSON.stringify(topTen));
+			res.send(topTen);
 		});
 	}
-
-
-	EnrollmentDataSet.find({}, function(err, resultArr){
-
-		resultArr.sort(function(a,b){
-			return b['Grand total'] - a['Grand total'];
-		});
-
-		var topTen = [];
-		for (var i=0; i<10; i++){
-			topTen[i] = resultArr[i];
-		}
-
-		res.send(topTen);
-	});
 }
 
 exports.loadQuestionForm2 = function (req, res, next) {
@@ -245,9 +224,18 @@ exports.loadQuestionForm2 = function (req, res, next) {
 }//*/
 
 exports.loadQuestionData2 = function(req, res, next){
-	MFDataSet.findOne({ unitid : req.params.cid }, function (err, recObj) {
+	var hit = cache.get("mf_"+req.params.cid);
+
+	if ( hit != undefined){//cache hit
+		var recObj = JSON.parse(hit);
 		res.send(recObj);
-	});
+	}
+	else{//cache miss
+		MFDataSet.findOne({ unitid : req.params.cid }, function (err, recObj) {
+			cache.set( "mf_"+req.params.cid, JSON.stringify(recObj));
+			res.send(recObj);
+		});
+	}
 }
 
 exports.loadQuestionForm3 = function(req, res, next) {
@@ -255,19 +243,50 @@ exports.loadQuestionForm3 = function(req, res, next) {
 }//*/
 
 exports.loadQuestionData3 = function(req, res, next){
-	TuitionDataSet.findOne({ unitid : req.params.cid}, function (err, recObj){
-		//console.log(recObj);
+	var hit = cache.get("tu_"+req.params.cid);
+
+	if ( hit != undefined){//cache hit
+		var recObj = JSON.parse(hit);
 		res.send(recObj);
-	});
+	}
+	else{//cache miss
+		TuitionDataSet.findOne({ unitid : req.params.cid}, function (err, recObj){
+			cache.set( "tu_"+req.params.cid, JSON.stringify(recObj));
+			res.send(recObj);
+		});
+	}
 }
 
 exports.loadQuestionForm2List = function(req, res, next){
-	CollegeList.find({}, function(err, resultsArr){
-		res.render('question2List', { resultSet: resultsArr});
-	});
+	var hit = cache.get("default");
+
+	if ( hit != undefined){//cache hit
+		var resultsArr = JSON.parse(hit);
+		var collegeList = { resultSet: resultsArr};
+		res.render('question2List', collegeList);
+	}
+	else{//cache miss
+		CollegeList.find({}, function(err, resultsArr){
+			cache.set( "default", JSON.stringify(resultsArr));
+			var collegeList = { resultSet: resultsArr};
+			res.render('question2List', collegeList);
+		});
+	}
 }
+
 exports.loadQuestionForm3List = function(req, res, next) {
-	CollegeList.find({}, function(err, resultsArr){
-		res.render('question3List', { resultSet: resultsArr});
-	});
+	var hit = cache.get("default");
+
+	if ( hit != undefined){//cache hit
+		var resultsArr = JSON.parse(hit);
+		var collegeList = { resultSet: resultsArr};
+		res.render('question3List', collegeList);
+	}
+	else{//cache miss
+		CollegeList.find({}, function(err, resultsArr){
+			cache.set( "default", JSON.stringify(resultsArr));
+			var collegeList = { resultSet: resultsArr};
+			res.render('question3List', collegeList);
+		});
+	}
 }//*/
