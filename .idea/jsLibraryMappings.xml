@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
+<<<<<<< HEAD
     <file url="file://$PROJECT_DIR$" libraries="{Colleges node_modules}" />
+=======
+    <file url="file://$PROJECT_DIR$" libraries="{Project1 node_modules}" />
+>>>>>>> 923637243c51b35e8862bfced9d2f31719759a83
   </component>
 </project>

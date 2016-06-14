@@ -29,6 +29,15 @@ var db = mongoose.connection;
 //var redisClient = require('redis').createClient;
 //var redis = redisClient(6379, 'localhost');
 
+require('../models/CollegeList');
+
+var records = new Array();
+var records = [];
+
+//Connect to mongoDB
+mongoose.connect('mongodb://localhost:27017/IS219');
+var db = mongoose.connection;
+
 console.log("loading models...");
 var CollegeList = mongoose.model('college');
 var CollegeRecord = mongoose.model('record');
@@ -56,6 +65,7 @@ function importAndParseFile(fnPath, collName){
       var MongoClient = require('mongodb').MongoClient;
       // Connect to the db
       MongoClient.connect("mongodb://heroku_9dlrrxv3:2v9f48c2rq5lunt1dilf9em2gn@ds057254.mongolab.com:57254/heroku_9dlrrxv3", function (err, db) {
+      MongoClient.connect("mongodb://localhost:27017/IS219", function (err, db) {
       	if(err){
       		console.log("Error! " + err);
       	}
@@ -65,11 +75,11 @@ function importAndParseFile(fnPath, collName){
          	if(err){
       			console.log("Insert error! " + err);
       		}
-            console.log(doc);
+            //console.log(doc);
          });
       });
-      console.log('Number of lines: ' + count);
-      console.log("Number of docs: " + records.length);
+      //console.log('Number of lines: ' + count);
+      //console.log("Number of docs: " + records.length);
    });
 }
 
@@ -224,6 +234,7 @@ exports.loadQuestionForm2 = function (req, res, next) {
 }//*/
 
 exports.loadQuestionData2 = function(req, res, next){
+
 	var hit = cache.get("mf_"+req.params.cid);
 
 	if ( hit != undefined){//cache hit
@@ -243,6 +254,7 @@ exports.loadQuestionForm3 = function(req, res, next) {
 }//*/
 
 exports.loadQuestionData3 = function(req, res, next){
+
 	var hit = cache.get("tu_"+req.params.cid);
 
 	if ( hit != undefined){//cache hit
@@ -289,4 +301,4 @@ exports.loadQuestionForm3List = function(req, res, next) {
 			res.render('question3List', collegeList);
 		});
 	}
-}//*/
+}

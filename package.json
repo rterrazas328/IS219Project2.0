@@ -1,6 +1,8 @@
 {
   "name": "Colleges",
   "version": "3.2.1",
+  "name": "Project1",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -16,6 +18,9 @@
     "morgan": "~1.5.1",
     "multer": "0.1.6",
     "redis": "^2.6.1",
+    "mongodb": "~1.2.14",
+    "morgan": "~1.5.1",
+    "redis": "^2.4.2",
     "serve-favicon": "~2.2.0"
   }
 }
