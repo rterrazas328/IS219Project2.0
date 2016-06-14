@@ -1,183 +1,72 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '--save', 'lru-cache' ]
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '--force' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.34
-4 verbose readDependencies using package.json deps
-5 verbose cache add [ 'lru-cache', null ]
-6 verbose cache add name=undefined spec="lru-cache" args=["lru-cache",null]
-7 verbose parsed url { protocol: null,
-7 verbose parsed url   slashes: null,
-7 verbose parsed url   auth: null,
-7 verbose parsed url   host: null,
-7 verbose parsed url   port: null,
-7 verbose parsed url   hostname: null,
-7 verbose parsed url   hash: null,
-7 verbose parsed url   search: null,
-7 verbose parsed url   query: null,
-7 verbose parsed url   pathname: 'lru-cache',
-7 verbose parsed url   path: 'lru-cache',
-7 verbose parsed url   href: 'lru-cache' }
-8 silly lockFile 6c9484ec-lru-cache lru-cache
-9 verbose lock lru-cache /Users/Ricardo/.npm/6c9484ec-lru-cache.lock
-10 silly lockFile 6c9484ec-lru-cache lru-cache
-11 silly lockFile 6c9484ec-lru-cache lru-cache
-12 verbose addNamed [ 'lru-cache', '' ]
-13 verbose addNamed [ null, '*' ]
-14 silly lockFile eb697186-lru-cache lru-cache@
-15 verbose lock lru-cache@ /Users/Ricardo/.npm/eb697186-lru-cache.lock
-16 silly addNameRange { name: 'lru-cache', range: '*', hasData: false }
-17 verbose request where is /lru-cache
-18 verbose request registry https://registry.npmjs.org/
-19 verbose request id 3e55870439080937
-20 verbose url raw /lru-cache
-21 verbose url resolving [ 'https://registry.npmjs.org/', './lru-cache' ]
-22 verbose url resolved https://registry.npmjs.org/lru-cache
-23 verbose request where is https://registry.npmjs.org/lru-cache
-24 info trying registry request attempt 1 at 09:33:33
-25 verbose etag "EL1H0BRLF5K1YKWEWD5SZTX15"
-26 http GET https://registry.npmjs.org/lru-cache
-27 http 304 https://registry.npmjs.org/lru-cache
-28 silly registry.get cb [ 304,
-28 silly registry.get   { date: 'Fri, 10 Jun 2016 13:33:33 GMT',
-28 silly registry.get     via: '1.1 varnish',
-28 silly registry.get     'cache-control': 'max-age=300',
-28 silly registry.get     etag: '"EL1H0BRLF5K1YKWEWD5SZTX15"',
-28 silly registry.get     age: '90',
-28 silly registry.get     connection: 'keep-alive',
-28 silly registry.get     'x-served-by': 'cache-atl6242-ATL',
-28 silly registry.get     'x-cache': 'HIT',
-28 silly registry.get     'x-cache-hits': '8',
-28 silly registry.get     'x-timer': 'S1465565613.482073,VS0,VE0',
-28 silly registry.get     vary: 'Accept-Encoding' } ]
-29 verbose etag https://registry.npmjs.org/lru-cache from cache
-30 silly addNameRange number 2 { name: 'lru-cache', range: '*', hasData: true }
-31 silly addNameRange versions [ 'lru-cache',
-31 silly addNameRange   [ '1.0.1',
-31 silly addNameRange     '1.0.2',
-31 silly addNameRange     '1.0.3',
-31 silly addNameRange     '1.0.4',
-31 silly addNameRange     '1.0.5',
-31 silly addNameRange     '1.0.6',
-31 silly addNameRange     '1.1.0',
-31 silly addNameRange     '1.1.1',
-31 silly addNameRange     '2.0.0',
-31 silly addNameRange     '2.0.1',
-31 silly addNameRange     '2.0.2',
-31 silly addNameRange     '2.0.3',
-31 silly addNameRange     '2.0.4',
-31 silly addNameRange     '2.1.0',
-31 silly addNameRange     '2.2.0',
-31 silly addNameRange     '2.2.1',
-31 silly addNameRange     '2.2.2',
-31 silly addNameRange     '2.2.4',
-31 silly addNameRange     '2.3.0',
-31 silly addNameRange     '2.3.1',
-31 silly addNameRange     '2.5.0',
-31 silly addNameRange     '2.5.1',
-31 silly addNameRange     '2.5.2',
-31 silly addNameRange     '2.6.0',
-31 silly addNameRange     '2.6.1',
-31 silly addNameRange     '2.6.2',
-31 silly addNameRange     '2.6.3',
-31 silly addNameRange     '2.6.4',
-31 silly addNameRange     '2.6.5',
-31 silly addNameRange     '2.7.0',
-31 silly addNameRange     '2.7.1',
-31 silly addNameRange     '2.7.2',
-31 silly addNameRange     '2.7.3',
-31 silly addNameRange     '3.0.0',
-31 silly addNameRange     '3.1.0',
-31 silly addNameRange     '3.1.1',
-31 silly addNameRange     '3.1.2',
-31 silly addNameRange     '3.2.0',
-31 silly addNameRange     '4.0.0',
-31 silly addNameRange     '4.0.1' ] ]
-32 verbose addNamed [ 'lru-cache', '4.0.1' ]
-33 verbose addNamed [ '4.0.1', '4.0.1' ]
-34 silly lockFile 67aa8ec7-lru-cache-4-0-1 lru-cache@4.0.1
-35 verbose lock lru-cache@4.0.1 /Users/Ricardo/.npm/67aa8ec7-lru-cache-4-0-1.lock
-36 silly lockFile 08f26344-rg-lru-cache-lru-cache-4-0-1-tgz https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.1.tgz
-37 verbose lock https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.1.tgz /Users/Ricardo/.npm/08f26344-rg-lru-cache-lru-cache-4-0-1-tgz.lock
-38 verbose addRemoteTarball [ 'https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.1.tgz',
-38 verbose addRemoteTarball   '1343955edaf2e37d9b9e7ee7241e27c4b9fb72be' ]
-39 info retry fetch attempt 1 at 09:33:33
-40 verbose fetch to= /var/folders/h8/ty4f028x7mg1jrk79gjb2ktw0000gn/T/npm-36647-uuS7QCIH/registry.npmjs.org/lru-cache/-/lru-cache-4.0.1.tgz
-41 http GET https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.1.tgz
-42 http 200 https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.1.tgz
-43 silly lockFile 08f26344-rg-lru-cache-lru-cache-4-0-1-tgz https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.1.tgz
-44 silly lockFile 08f26344-rg-lru-cache-lru-cache-4-0-1-tgz https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.1.tgz
-45 silly lockFile 67aa8ec7-lru-cache-4-0-1 lru-cache@4.0.1
-46 silly lockFile 67aa8ec7-lru-cache-4-0-1 lru-cache@4.0.1
-47 silly lockFile eb697186-lru-cache lru-cache@
-48 silly lockFile eb697186-lru-cache lru-cache@
-49 error Error: EACCES, mkdir '/Users/Ricardo/.npm/lru-cache/4.0.1'
-49 error  { [Error: EACCES, mkdir '/Users/Ricardo/.npm/lru-cache/4.0.1']
-49 error   errno: 3,
-49 error   code: 'EACCES',
-49 error   path: '/Users/Ricardo/.npm/lru-cache/4.0.1',
-49 error   parent: 'Colleges' }
-50 error Please try running this command again as root/Administrator.
-51 error System Darwin 15.3.0
-52 error command "node" "/usr/local/bin/npm" "install" "--save" "lru-cache"
-53 error cwd /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
-54 error node -v v0.10.34
-55 error npm -v 1.4.28
-56 error path /Users/Ricardo/.npm/lru-cache/4.0.1
-57 error code EACCES
-58 error errno 3
-59 error stack Error: EACCES, mkdir '/Users/Ricardo/.npm/lru-cache/4.0.1'
-60 verbose exit [ 3, true ]
-1 verbose cli [ 'node',
-1 verbose cli   '/usr/local/bin/npm',
-1 verbose cli   'install',
-1 verbose cli   'https://github.com/Gottox/mongoose-cache.git' ]
-2 info using npm@1.4.28
-3 info using node@v0.10.34
-4 verbose readDependencies using package.json deps
-5 verbose cache add [ 'https://github.com/Gottox/mongoose-cache.git', null ]
-6 verbose cache add name=undefined spec="https://github.com/Gottox/mongoose-cache.git" args=["https://github.com/Gottox/mongoose-cache.git",null]
-7 verbose parsed url { protocol: 'https:',
-7 verbose parsed url   slashes: true,
-7 verbose parsed url   auth: null,
-7 verbose parsed url   host: 'github.com',
-7 verbose parsed url   port: null,
-7 verbose parsed url   hostname: 'github.com',
-7 verbose parsed url   hash: null,
-7 verbose parsed url   search: null,
-7 verbose parsed url   query: null,
-7 verbose parsed url   pathname: '/Gottox/mongoose-cache.git',
-7 verbose parsed url   path: '/Gottox/mongoose-cache.git',
-7 verbose parsed url   href: 'https://github.com/Gottox/mongoose-cache.git' }
-8 silly lockFile d70dab77-ub-com-Gottox-mongoose-cache-git https://github.com/Gottox/mongoose-cache.git
-9 verbose lock https://github.com/Gottox/mongoose-cache.git /Users/Ricardo/.npm/d70dab77-ub-com-Gottox-mongoose-cache-git.lock
-10 verbose addRemoteTarball [ 'https://github.com/Gottox/mongoose-cache.git', null ]
-11 info retry fetch attempt 1 at 04:49:31
-12 verbose fetch to= /tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
-13 http GET https://github.com/Gottox/mongoose-cache.git
-14 http 200 https://github.com/Gottox/mongoose-cache.git
-15 verbose tar unpack /tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
-16 silly lockFile 7943bbb3-Gottox-mongoose-cache-git-unpack tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack
-17 verbose lock tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack /Users/Ricardo/.npm/7943bbb3-Gottox-mongoose-cache-git-unpack.lock
-18 silly lockFile 0b12ac2e-ub-com-Gottox-mongoose-cache-git tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
-19 verbose lock tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git /Users/Ricardo/.npm/0b12ac2e-ub-com-Gottox-mongoose-cache-git.lock
-20 silly gunzTarPerm modes [ '755', '644' ]
-21 error not a package /tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
-22 silly lockFile 7943bbb3-Gottox-mongoose-cache-git-unpack tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack
-23 silly lockFile 7943bbb3-Gottox-mongoose-cache-git-unpack tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack
-24 silly lockFile 0b12ac2e-ub-com-Gottox-mongoose-cache-git tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
-25 silly lockFile 0b12ac2e-ub-com-Gottox-mongoose-cache-git tar:///tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git
-26 silly lockFile d70dab77-ub-com-Gottox-mongoose-cache-git https://github.com/Gottox/mongoose-cache.git
-27 silly lockFile d70dab77-ub-com-Gottox-mongoose-cache-git https://github.com/Gottox/mongoose-cache.git
-28 error Error: ENOENT, open '/tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack/package.json'
-29 error If you need help, you may report this *entire* log,
-29 error including the npm and node versions, at:
-29 error     <http://github.com/npm/npm/issues>
-30 error System Darwin 14.5.0
-31 error command "node" "/usr/local/bin/npm" "install" "https://github.com/Gottox/mongoose-cache.git"
-32 error cwd /Users/Ricardo/Documents/Ricardo/IS 219/Project1
-33 error node -v v0.10.34
-34 error npm -v 1.4.28
-35 error path /tmp/npm-1653-9bObi4-t/github.com/Gottox/mongoose-cache.git-unpack/package.json
-36 error code ENOENT
-37 error errno 34
-38 verbose exit [ 34, true ]
+4 warn using --force I sure hope you know what you are doing.
+5 verbose readDependencies using package.json deps
+6 verbose install where, deps [ '/Users/Ricardo/Documents/Ricardo/IS 219/Colleges',
+6 verbose install   [ 'body-parser',
+6 verbose install     'cookie-parser',
+6 verbose install     'debug',
+6 verbose install     'express',
+6 verbose install     'jade',
+6 verbose install     'lru-cache',
+6 verbose install     'mongodb',
+6 verbose install     'morgan',
+6 verbose install     'multer',
+6 verbose install     'redis',
+6 verbose install     'serve-favicon' ] ]
+7 info preinstall Project1@0.0.0
+8 verbose readDependencies using package.json deps
+9 verbose already installed skipping express@~4.11.1 /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+10 verbose already installed skipping jade@~1.9.1 /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+11 verbose already installed skipping lru-cache@^4.0.1 /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+12 verbose already installed skipping mongodb@~1.2.14 /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+13 verbose already installed skipping morgan@~1.5.1 /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+14 verbose already installed skipping multer@0.1.6 /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+15 verbose already installed skipping redis@^2.4.2 /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+16 verbose already installed skipping serve-favicon@~2.2.0 /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+17 verbose already installed skipping body-parser@~1.10.2 /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+18 verbose already installed skipping cookie-parser@~1.3.3 /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+19 verbose already installed skipping debug@~2.1.1 /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+20 silly resolved []
+21 info build /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+22 verbose linkStuff [ false, false, false, '/Users/Ricardo/Documents/Ricardo/IS 219' ]
+23 info linkStuff Project1@0.0.0
+24 verbose linkBins Project1@0.0.0
+25 verbose linkMans Project1@0.0.0
+26 verbose rebuildBundles Project1@0.0.0
+27 verbose rebuildBundles [ '.DS_Store',
+27 verbose rebuildBundles   '.bin',
+27 verbose rebuildBundles   'body-parser',
+27 verbose rebuildBundles   'cookie-parser',
+27 verbose rebuildBundles   'csv',
+27 verbose rebuildBundles   'debug',
+27 verbose rebuildBundles   'express',
+27 verbose rebuildBundles   'jade',
+27 verbose rebuildBundles   'lru-cache',
+27 verbose rebuildBundles   'mongodb',
+27 verbose rebuildBundles   'mongoose',
+27 verbose rebuildBundles   'mongoose-cache',
+27 verbose rebuildBundles   'morgan',
+27 verbose rebuildBundles   'multer',
+27 verbose rebuildBundles   'redis',
+27 verbose rebuildBundles   'serve-favicon' ]
+28 verbose rebuild bundle /Users/Ricardo/Documents/Ricardo/IS 219/Colleges/node_modules/csv
+29 info build /Users/Ricardo/Documents/Ricardo/IS 219/Colleges/node_modules/csv
+30 error Failed to parse json
+30 error Unexpected token <
+31 error File: /Users/Ricardo/Documents/Ricardo/IS 219/Colleges/node_modules/csv/package.json
+32 error Failed to parse package.json data.
+32 error package.json must be actual JSON, not just JavaScript.
+32 error
+32 error This is not a bug in npm.
+32 error Tell the package author to fix their package.json file. JSON.parse
+33 error System Darwin 15.3.0
+34 error command "node" "/usr/local/bin/npm" "install" "--force"
+35 error cwd /Users/Ricardo/Documents/Ricardo/IS 219/Colleges
+36 error node -v v0.10.34
+37 error npm -v 1.4.28
+38 error file /Users/Ricardo/Documents/Ricardo/IS 219/Colleges/node_modules/csv/package.json
+39 error code EJSONPARSE
+40 verbose exit [ 1, true ]
