@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(multer()); // for parsing multipart/form-data
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/Colleges', routes);
+app.use('/', routes);
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
