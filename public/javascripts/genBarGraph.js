@@ -3,7 +3,6 @@
 $.ajax({
 	type: "GET",
 	url: '/questionData1',
-	url: 'http://localhost:3000/questionData1',
 	dataType: 'json'
 
 }).done(function(top10Array) {

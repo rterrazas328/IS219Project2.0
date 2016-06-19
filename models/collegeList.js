@@ -12,7 +12,7 @@ collegeRecordSchema = new Schema({
 
 collegeSchema = new Schema({
 	_id: String,
-	UNITID: Number,
+	UNITID: String,
 	INSTNM: String
 });
 
@@ -23,7 +23,7 @@ collegeLookupSchema = new Schema({
 
 //models to answer questions 1, 2, & 3
 collegeEnrollmentSchema = new Schema({
-	unitid: Number,
+	unitid: String,
 	'institution name' : String,
 	'Grand total' : Number
 });

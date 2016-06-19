@@ -5,7 +5,6 @@ var c = $('h1').attr('id');
 $.ajax({
 	type: "GET",
 	url: '/questionData3/' + c,
-	url: 'http://localhost:3000/questionData3/' + c,
 	dataType: 'json'
 
 }).done(function(collObj){

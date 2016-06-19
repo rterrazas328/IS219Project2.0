@@ -6,7 +6,6 @@
 
 var app = require('../app');
 var debug = require('debug')('Colleges:server');
-var debug = require('debug')('Project1:server');
 var http = require('http');
 
 /**

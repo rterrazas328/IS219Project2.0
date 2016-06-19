@@ -15,13 +15,13 @@ var cache = LRU(options);
 var records = new Array();
 var records = [];
 var dbOptions = {
-	user: 'public',
-	pass: 'burrito_c@Nd!_yYz^'
+	user: 'heroku_9dlrrxv3',//public
+	pass: '2v9f48c2rq5lunt1dilf9em2gn'//burrito_c@Nd!_yYz^
 }
 
 //Connect to mongoDB
-//mongoose.connect('mongodb://heroku_9dlrrxv3:2v9f48c2rq5lunt1dilf9em2gn@ds057254.mongolab.com:57254/heroku_9dlrrxv3');
-mongoose.connect("mongodb://ricardoterrazas.com:27017/IS219", dbOptions);
+mongoose.connect('mongodb://ds057254.mongolab.com:57254/heroku_9dlrrxv3', dbOptions);
+//mongoose.connect("mongodb://ricardoterrazas.com:27017/IS219", dbOptions);
 
 var db = mongoose.connection;
 
@@ -81,15 +81,14 @@ exports.loadIndexPage = function(req, res, next) {
 	var hit = cache.get("default");
 
 	if ( hit != undefined){//cache hit
-		var resultsArr = JSON.parse(hit);
-		var collegeList = { resultSet: resultsArr};
+		var collegeList = JSON.parse(hit);
 		res.render('collegeList', collegeList);
 	}
 	else{//cache miss
 		CollegeList.find({}, function(err, resultsArr){
 
-			cache.set( "default", JSON.stringify(resultsArr));
 			var collegeList = { resultSet: resultsArr};
+			cache.set( "default", JSON.stringify(collegeList));
 			res.render('collegeList', collegeList);
 		});
 	}
@@ -201,7 +200,8 @@ exports.loadQuestionData1 = function(req, res, next){
 	var hit = cache.get("top10");
 
 	if ( hit != undefined){//cache hit
-		var topTen = JSON.parse(hit);
+		var resultSet = JSON.parse(hit);
+		var topTen = resultSet['list'];
 		res.send(topTen);
 	}
 	else{//cache miss
@@ -215,7 +215,8 @@ exports.loadQuestionData1 = function(req, res, next){
 			for (var i=0; i<10; i++){
 				topTen[i] = resultArr[i];
 			}
-			cache.set( "top10", JSON.stringify(topTen));
+			var resultSet = { list : topTen}
+			cache.set( "top10", JSON.stringify(resultSet));
 			res.send(topTen);
 		});
 	}
@@ -235,8 +236,14 @@ exports.loadQuestionData2 = function(req, res, next){
 	}
 	else{//cache miss
 		MFDataSet.findOne({ unitid : req.params.cid }, function (err, recObj) {
-			cache.set( "mf_"+req.params.cid, JSON.stringify(recObj));
-			res.send(recObj);
+
+			if (!err) {
+				cache.set( "mf_"+req.params.cid, JSON.stringify(recObj));
+				res.send(recObj);
+			}
+			else{
+				console.log("Database Query Error: " + err);
+			}
 		});
 	}
 }
@@ -265,14 +272,13 @@ exports.loadQuestionForm2List = function(req, res, next){
 	var hit = cache.get("default");
 
 	if ( hit != undefined){//cache hit
-		var resultsArr = JSON.parse(hit);
-		var collegeList = { resultSet: resultsArr};
+		var collegeList = JSON.parse(hit);
 		res.render('question2List', collegeList);
 	}
 	else{//cache miss
 		CollegeList.find({}, function(err, resultsArr){
-			cache.set( "default", JSON.stringify(resultsArr));
 			var collegeList = { resultSet: resultsArr};
+			cache.set( "default", JSON.stringify(collegeList));
 			res.render('question2List', collegeList);
 		});
 	}
@@ -282,14 +288,13 @@ exports.loadQuestionForm3List = function(req, res, next) {
 	var hit = cache.get("default");
 
 	if ( hit != undefined){//cache hit
-		var resultsArr = JSON.parse(hit);
-		var collegeList = { resultSet: resultsArr};
+		var collegeList = JSON.parse(hit);
 		res.render('question3List', collegeList);
 	}
 	else{//cache miss
 		CollegeList.find({}, function(err, resultsArr){
-			cache.set( "default", JSON.stringify(resultsArr));
 			var collegeList = { resultSet: resultsArr};
+			cache.set( "default", JSON.stringify(collegeList));
 			res.render('question3List', collegeList);
 		});
 	}
