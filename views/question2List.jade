@@ -1,7 +1,0 @@
-extends generalLayout
-
-block content
-	h1 Select a college to view its male-female ratio
-	ul
-		for college in resultSet
-			li: a(href='/question2/' + college.UNITID)= college.INSTNM
