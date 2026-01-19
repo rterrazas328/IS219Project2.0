@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
+const MongoClient = require('mongodb').MongoClient;
 var events = require('events');
 var eventEmitter = new events.EventEmitter;
 var csv = require('csv');
-//var csv = require('csv-parser');
 var fs = require('fs');
 require('../models/collegeList');
+
 
 var LRU = require("lru-cache");
 var options = { max: 500
@@ -16,14 +17,16 @@ var cache = LRU(options);
 var records = new Array();
 var records = [];
 var dbOptions = {
-	user: 'ricardo',//'heroku_9dlrrxv3',//public
-	pass: '021274'//'2v9f48c2rq5lunt1dilf9em2gn'//burrito_c@Nd!_yYz^
+	user: process.env.DB_USER,//'heroku_9dlrrxv3',//public
+	pass: process.env.DB_PASSWORD//'2v9f48c2rq5lunt1dilf9em2gn'//burrito_c@Nd!_yYz^
 }
 
 //Connect to mongoDB
 //mongoose.connect('mongodb://ds057254.mongolab.com:57254/heroku_9dlrrxv3', dbOptions);
 //mongoose.connect("mongodb://ricardoterrazas.com:27017/IS219", dbOptions);
 mongoose.connect("mongodb://localhost:27017/IS219", dbOptions);
+var mongoCLIURI = `mongodb://${dbOptions.user}:${dbOptions.pass}@localhost:27017/IS219?authSource=IS219`;
+var mongoClientConnector = new MongoClient(mongoCLIURI);
 
 var db = mongoose.connection;
 
@@ -53,21 +56,27 @@ function importAndParseFile(fnPath, collName){
 	//console.log("Path: " + __dirname + '/' + fnPath);
 	console.log("Path: " + fnPath);
    
-	/*fs.createReadStream(fnPath)
-		.pipe(csv())
-		.on('headers', (headers) => records.push(headers) )
-		.on('data', (row) => records.push(row))
-		.on('end', () => {
-			console.log(records);
-		});//*/
 
+	csv()
+	.from.stream(fs.createReadStream(fnPath), { columns: true })
+	.on('record',  (row) => records.push(row))
+	.on('end', async () => {
+			//console.log(records);
+			try {
+				await mongoClientConnector.connect();
+				var db_client = mongoClientConnector.db("IS219");
+				var collection = db_client.collection(collName);
+				//console.log(collection);
+				await collection.insertMany(records);
 
-	fs.createReadStream(fnPath)
-		.pipe(csv(records))
-		.on('record', (row) => records.push(row))
-		.on('end', () => {
-			console.log(records);
-		});
+			} finally {
+				await mongoClientConnector.close();
+				console.log("Finished attempting insert and closing connection...");
+			}
+		})
+	.on('error', function(error){
+	console.log(error.message);
+	});
 
 	/*csv(records).from.stream(fs.createReadStream(fnPath), {
       columns: true
@@ -94,8 +103,6 @@ function importAndParseFile(fnPath, collName){
       //console.log('Number of lines: ' + count);
       //console.log("Number of docs: " + records.length);
    });//*/
-
-   console.log(records);
 }
 
 exports.loadIndexPage = async function(req, res, next) {

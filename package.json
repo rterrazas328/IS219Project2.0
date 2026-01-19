@@ -10,6 +10,7 @@
     "cookie-parser": "^1.4.7",
     "csv": "~0.2.9",
     "debug": "^2.6.9",
+    "dotenv": "^17.2.3",
     "express": "^4.22.1",
     "lru-cache": "^4.0.1",
     "mongodb": "^7.0.0",
