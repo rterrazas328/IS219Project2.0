@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var events = require('events');
 var eventEmitter = new events.EventEmitter;
 var csv = require('csv');
+//var csv = require('csv-parser');
 var fs = require('fs');
 require('../models/collegeList');
 
@@ -51,7 +52,24 @@ db.once('open', function (callback) {
 function importAndParseFile(fnPath, collName){
 	//console.log("Path: " + __dirname + '/' + fnPath);
 	console.log("Path: " + fnPath);
-   csv(records).from.stream(fs.createReadStream(fnPath), {
+   
+	/*fs.createReadStream(fnPath)
+		.pipe(csv())
+		.on('headers', (headers) => records.push(headers) )
+		.on('data', (row) => records.push(row))
+		.on('end', () => {
+			console.log(records);
+		});//*/
+
+
+	fs.createReadStream(fnPath)
+		.pipe(csv(records))
+		.on('record', (row) => records.push(row))
+		.on('end', () => {
+			console.log(records);
+		});
+
+	/*csv(records).from.stream(fs.createReadStream(fnPath), {
       columns: true
    }).on('record', function (row, index) {
       records.push(row);
@@ -75,7 +93,7 @@ function importAndParseFile(fnPath, collName){
       });
       //console.log('Number of lines: ' + count);
       //console.log("Number of docs: " + records.length);
-   });
+   });//*/
 
    console.log(records);
 }
@@ -154,8 +172,6 @@ exports.loadUploadPage = function(req, res, next) {
 //code to process downloaded csv from the use
 exports.loadDownloadForm = function(req, res, next) {
 	console.log("loading form...");
-	console.log(req.files);
-	console.log(req.body);
 	if(Object.keys(req.files).length == 0){
 		console.log("files is null!");
 		res.render('uploadError', {});
