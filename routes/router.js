@@ -1,14 +1,15 @@
 var express = require('express');
 var router = express.Router();
-
+//var multer  = require('multer');
+//var upload = multer({dest: '../uploads/' });
 var loader = require('../controllers/pageLoader');
 
 /* GET home page. */
 router.get('/', loader.loadIndexPage);
 router.get('/college/:cid', loader.loadRecord);
 router.get('/upload',  loader.loadUploadPage);
-//router.post('/upload', loader.loadDownloadForm);
 router.post('/upload', loader.loadDownloadForm);
+//router.post('/upload', upload.any(), loader.loadDownloadForm);
 //questions
 router.get('/question1', loader.loadQuestionForm1);
 router.get('/question2', loader.loadQuestionForm2List);

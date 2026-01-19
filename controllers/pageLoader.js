@@ -15,13 +15,14 @@ var cache = LRU(options);
 var records = new Array();
 var records = [];
 var dbOptions = {
-	user: 'heroku_9dlrrxv3',//public
-	pass: '2v9f48c2rq5lunt1dilf9em2gn'//burrito_c@Nd!_yYz^
+	user: 'ricardo',//'heroku_9dlrrxv3',//public
+	pass: '021274'//'2v9f48c2rq5lunt1dilf9em2gn'//burrito_c@Nd!_yYz^
 }
 
 //Connect to mongoDB
-mongoose.connect('mongodb://ds057254.mongolab.com:57254/heroku_9dlrrxv3', dbOptions);
+//mongoose.connect('mongodb://ds057254.mongolab.com:57254/heroku_9dlrrxv3', dbOptions);
 //mongoose.connect("mongodb://ricardoterrazas.com:27017/IS219", dbOptions);
+mongoose.connect("mongodb://localhost:27017/IS219", dbOptions);
 
 var db = mongoose.connection;
 
@@ -54,7 +55,7 @@ function importAndParseFile(fnPath, collName){
       columns: true
    }).on('record', function (row, index) {
       records.push(row);
-      //console.log(row); push an array
+      //console.log(row); //push an array
    }).on('end', function (count) {
       var MongoClient = require('mongodb').MongoClient;
       // Connect to the db
@@ -62,6 +63,7 @@ function importAndParseFile(fnPath, collName){
       	if(err){
       		console.log("Error! " + err);
       	}
+		console.log("is this working?1587");
          var collection = db.collection(collName);
          //insert records in one bulk insert
          collection.insert(records, function (err, doc) {
@@ -74,9 +76,11 @@ function importAndParseFile(fnPath, collName){
       //console.log('Number of lines: ' + count);
       //console.log("Number of docs: " + records.length);
    });
+
+   console.log(records);
 }
 
-exports.loadIndexPage = function(req, res, next) {
+exports.loadIndexPage = async function(req, res, next) {
 
 	var hit = cache.get("default");
 
@@ -84,14 +88,20 @@ exports.loadIndexPage = function(req, res, next) {
 		var collegeList = JSON.parse(hit);
 		res.render('collegeList', collegeList);
 	}
-	else{//cache miss
+	else{
+		var resultsArr = await CollegeList.find({});
+		var collegeList = { resultSet: resultsArr};
+		cache.set( "default", JSON.stringify(collegeList));
+		res.render('collegeList', collegeList);
+	}
+	/*else{//cache miss
 		CollegeList.find({}, function(err, resultsArr){
 
 			var collegeList = { resultSet: resultsArr};
 			cache.set( "default", JSON.stringify(collegeList));
 			res.render('collegeList', collegeList);
 		});
-	}
+	}*/
 }
 
 /*exports.loadIndexPage = function(req, res, next) {
@@ -123,21 +133,37 @@ exports.loadIndexPage = function(req, res, next) {
 
 //Display Form to upload csv
 exports.loadUploadPage = function(req, res, next) {
+	/*var MongoClient = require('mongodb').MongoClient;
+	console.log("in function 124~");
+	MongoClient.connect("mongodb://localhost:27017/IS219", function (err, db) {
+      	if(err){
+      		console.log("Error! " + err);
+      	}
+
+		//db.command({});
+		console.log("in function 123~");
+		var collectionList = db.listCollections();
+		for (var collection of collectionList) {
+			console.log(collection);
+		}
+      });*/
+
 	res.render('upload', {});
 }
 
 //code to process downloaded csv from the use
 exports.loadDownloadForm = function(req, res, next) {
 	console.log("loading form...");
-
+	console.log(req.files);
+	console.log(req.body);
 	if(Object.keys(req.files).length == 0){
 		console.log("files is null!");
 		res.render('uploadError', {});
 	}
 	else{
 		console.log("files not null!");
-		var filePath = req.files.csvFile.path;
-		var collectionName = "tuition";//edit collegeVarDetails, enrollment
+		var filePath = req.files[0].path;
+		var collectionName = "collegeVarDetails";//edit collegeVarDetails, enrollment
 
 		importAndParseFile(filePath, collectionName);
 		res.render('uploadConfirm', {});
