@@ -183,7 +183,7 @@ exports.loadDownloadForm = function(req, res, next) {
 		var filePath = req.files[0].path;
 		var collectionName = req.body.collections;//edit collegeVarDetails, enrollment
 
-		//importAndParseFile(filePath, collectionName);
+		importAndParseFile(filePath, collectionName);
 		res.render('uploadConfirm', {});
 	}
 	
