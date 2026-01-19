@@ -8,4 +8,9 @@ block content
 	form(action='/upload', enctype='multipart/form-data', method='post')
 		input(type='file', name='csvFile', size='30')
 		br
+		label(for="collections") Choose a Collection to upload to
+		select(id="collections" name="collections")
+			for collection in coll_response_list
+				option(value=collection)=collection
+		br
 		input(type='submit', value='send')

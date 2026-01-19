@@ -157,23 +157,18 @@ exports.loadIndexPage = async function(req, res, next) {
 }//*/
 
 //Display Form to upload csv
-exports.loadUploadPage = function(req, res, next) {
-	/*var MongoClient = require('mongodb').MongoClient;
-	console.log("in function 124~");
-	MongoClient.connect("mongodb://localhost:27017/IS219", function (err, db) {
-      	if(err){
-      		console.log("Error! " + err);
-      	}
-
-		//db.command({});
-		console.log("in function 123~");
-		var collectionList = db.listCollections();
-		for (var collection of collectionList) {
-			console.log(collection);
+exports.loadUploadPage =async  function(req, res, next) {
+	var collectionsList;
+	try {
+			await mongoClientConnector.connect();
+			var db_client = mongoClientConnector.db("IS219");
+			var collections = db_client.listCollections();
+			collectionsList = await collections.toArray();
+		} finally {
+			await mongoClientConnector.close();
+			res.render('upload', {coll_response_list: collectionsList.map(c => c.name)});
 		}
-      });*/
-
-	res.render('upload', {});
+	//res.render('upload', {});
 }
 
 //code to process downloaded csv from the use
@@ -186,9 +181,9 @@ exports.loadDownloadForm = function(req, res, next) {
 	else{
 		console.log("files not null!");
 		var filePath = req.files[0].path;
-		var collectionName = "collegeVarDetails";//edit collegeVarDetails, enrollment
+		var collectionName = req.body.collections;//edit collegeVarDetails, enrollment
 
-		importAndParseFile(filePath, collectionName);
+		//importAndParseFile(filePath, collectionName);
 		res.render('uploadConfirm', {});
 	}
 	
