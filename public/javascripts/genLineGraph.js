@@ -11,7 +11,7 @@ $.ajax({
 	console.log("Success!!!");
 	//console.log(collObj);
 	//build data Arrays
-	var tuitionInc = ['Tuition Increase', collObj['Tuition and fees 2010-11'], collObj['Tuition and fees 2013-14']];
+	var tuitionInc = ['Tuition per academic year', collObj['Out-of-state tuition and fees 2010-11'], collObj['Out-of-state tuition and fees 2013-14']];
 	var yearsArr = ['2010', '2013'];
 
 	var chart = c3.generate({

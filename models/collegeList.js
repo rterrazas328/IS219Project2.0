@@ -23,22 +23,22 @@ collegeLookupSchema = new Schema({
 
 //models to answer questions 1, 2, & 3
 collegeEnrollmentSchema = new Schema({
-	unitid: String,
+	UNITID: String,
 	'institution name' : String,
 	'Grand total' : Number
 });
 collegeMFSchema = new Schema({
-	unitid: String,
+	UNITID: String,
 	'institution name' : String,
 	'Grand total men' : Number,
 	'Grand total women' : Number
 
 });
 collegeTuitionDeltaSchema = new Schema({
-	unitid: String,
+	UNITID: String,
 	'institution name' : String,
-	'Tuition and fees 2010-11' : Number,
-	'Tuition and fees 2013-14': Number
+	'Out-of-state tuition and fees 2010-11' : Number,
+	'Out-of-state tuition and fees 2013-14': Number
 
 });//*/
 

@@ -52,14 +52,56 @@ db.once('open', function (callback) {
 });
 
 
-function importAndParseFile(fnPath, collName){
+async function importAndParseFile(fnPath, collName){
+
+	var tempCounter = 0;
 	//console.log("Path: " + __dirname + '/' + fnPath);
 	console.log("Path: " + fnPath);
-   
+   var collegeData = await CollegeLookup.find({});
+
+   var collegeMap = {};
+   collegeData.map( c => {
+		collegeMap[c._doc.UNITID] = c._doc.INSTNM;
+   } );
+	//console.log(collegeMap);
 
 	csv()
 	.from.stream(fs.createReadStream(fnPath), { columns: true })
-	.on('record',  (row) => records.push(row))
+	.on('record',  (row) => {
+		if( collName === "enrollment") {
+			
+			if (tempCounter) {
+				if (records[tempCounter-1].UNITID === row.UNITID) {
+					records[tempCounter-1]['Grand total'] += parseInt(row['Grand total'], 10);
+					records[tempCounter-1]['Grand total men'] += parseInt(row['Grand total men'], 10);
+					records[tempCounter-1]['Grand total women'] += parseInt(row['Grand total women'], 10);
+				} else {
+					row['Grand total'] = parseInt(row['Grand total'], 10);
+					row['Grand total men'] = parseInt(row['Grand total men'], 10);
+					row['Grand total women'] = parseInt(row['Grand total women'], 10);
+					row['institution name'] = collegeMap[row.UNITID];
+					records.push(row);
+					tempCounter++;
+				}
+			} else {
+				row['Grand total'] = parseInt(row['Grand total'], 10);
+				row['Grand total men'] = parseInt(row['Grand total men'], 10);
+				row['Grand total women'] = parseInt(row['Grand total women'], 10);
+				row['institution name'] = collegeMap[row.UNITID];
+				records.push(row);
+				tempCounter++;
+			}
+			//console.log(records[tempCounter-1]);
+			//console.log(records[tempCounter-1]['Grand total']);
+		}
+		else if (collName === "tuition") {
+			row['institution name'] = collegeMap[row.UNITID];
+			records.push(row);
+		}
+		else {
+			records.push(row);
+		}
+	})
 	.on('end', async () => {
 			//console.log(records);
 			try {
@@ -71,6 +113,7 @@ function importAndParseFile(fnPath, collName){
 
 			} finally {
 				await mongoClientConnector.close();
+				records = [];
 				console.log("Finished attempting insert and closing connection...");
 			}
 		})
@@ -78,31 +121,6 @@ function importAndParseFile(fnPath, collName){
 	console.log(error.message);
 	});
 
-	/*csv(records).from.stream(fs.createReadStream(fnPath), {
-      columns: true
-   }).on('record', function (row, index) {
-      records.push(row);
-      //console.log(row); //push an array
-   }).on('end', function (count) {
-      var MongoClient = require('mongodb').MongoClient;
-      // Connect to the db
-      MongoClient.connect("mongodb://localhost:27017/IS219", function (err, db) {
-      	if(err){
-      		console.log("Error! " + err);
-      	}
-		console.log("is this working?1587");
-         var collection = db.collection(collName);
-         //insert records in one bulk insert
-         collection.insert(records, function (err, doc) {
-         	if(err){
-      			console.log("Insert error! " + err);
-      		}
-            //console.log(doc);
-         });
-      });
-      //console.log('Number of lines: ' + count);
-      //console.log("Number of docs: " + records.length);
-   });//*/
 }
 
 exports.loadIndexPage = async function(req, res, next) {
@@ -113,20 +131,12 @@ exports.loadIndexPage = async function(req, res, next) {
 		var collegeList = JSON.parse(hit);
 		res.render('collegeList', collegeList);
 	}
-	else{
+	else{//cache miss
 		var resultsArr = await CollegeList.find({});
 		var collegeList = { resultSet: resultsArr};
 		cache.set( "default", JSON.stringify(collegeList));
 		res.render('collegeList', collegeList);
 	}
-	/*else{//cache miss
-		CollegeList.find({}, function(err, resultsArr){
-
-			var collegeList = { resultSet: resultsArr};
-			cache.set( "default", JSON.stringify(collegeList));
-			res.render('collegeList', collegeList);
-		});
-	}*/
 }
 
 /*exports.loadIndexPage = function(req, res, next) {
@@ -189,7 +199,7 @@ exports.loadDownloadForm = function(req, res, next) {
 	
 }
 
-exports.loadRecord = function(req, res, next) {
+exports.loadRecord = async function(req, res, next) {
 
 	var hit = cache.get(req.params.cid);
 
@@ -198,9 +208,9 @@ exports.loadRecord = function(req, res, next) {
 		res.render('collegeRecord', { resObj2 : renderObject});
 	}
 	else{//cache miss
-		CollegeRecord.find({}, function(err, rArray){
 
-			var queryOptionsString = "";
+		var rArray = await CollegeRecord.find({});
+		var queryOptionsString = "";
 			var nameToTitleObject = {};
 
 			//required loop
@@ -210,14 +220,14 @@ exports.loadRecord = function(req, res, next) {
 				queryOptionsString += rArray[i].varname + " ";
 				nameToTitleObject[rArray[i].varname] = rArray[i].varTitle;
 			}
-
 			//Get rid of space character at end of string
 			var queryOptionsString = queryOptionsString.substring(0,queryOptionsString.length-1);
 
 			//Now have string of varnames [UNITID, INSTNM, ect...] that we will pass to query as options
-			CollegeLookup.findOne({ _id : req.params.cid}, queryOptionsString, {lean: true}, function (err, rec){
+			var rec = await CollegeLookup.findOne({ _id : req.params.cid}).lean();
 
-				var renderObject = {};
+			var renderObject = {};
+			//console.log(rec);
 
 				for (ele in rec){
 					var valueforCurrentDoc = rec[ele];
@@ -229,9 +239,7 @@ exports.loadRecord = function(req, res, next) {
 				}
 				cache.set( req.params.cid, JSON.stringify(renderObject));
 				res.render('collegeRecord', { resObj2 : renderObject});
-			});
-		});
-	}//*/
+	}
 }
 //just renders the jade view which contains script
 exports.loadQuestionForm1 = function(req, res, next) {
@@ -239,7 +247,7 @@ exports.loadQuestionForm1 = function(req, res, next) {
 }//*/
 
 //loads data into ajax response to be loaded into the graph
-exports.loadQuestionData1 = function(req, res, next){
+exports.loadQuestionData1 =async function(req, res, next){
 
 	var hit = cache.get("top10");
 
@@ -249,9 +257,10 @@ exports.loadQuestionData1 = function(req, res, next){
 		res.send(topTen);
 	}
 	else{//cache miss
-		EnrollmentDataSet.find({}, function(err, resultArr){
 
-			resultArr.sort(function(a,b){
+		var resultArr = await EnrollmentDataSet.find({});
+		console.log(resultArr);
+		resultArr.sort(function(a,b){
 				return b['Grand total'] - a['Grand total'];
 			});
 
@@ -262,7 +271,7 @@ exports.loadQuestionData1 = function(req, res, next){
 			var resultSet = { list : topTen}
 			cache.set( "top10", JSON.stringify(resultSet));
 			res.send(topTen);
-		});
+
 	}
 }
 
@@ -270,7 +279,7 @@ exports.loadQuestionForm2 = function (req, res, next) {
 	res.render('question2', { collegeID : req.params.cid});
 }//*/
 
-exports.loadQuestionData2 = function(req, res, next){
+exports.loadQuestionData2 = async function(req, res, next){
 
 	var hit = cache.get("mf_"+req.params.cid);
 
@@ -279,16 +288,10 @@ exports.loadQuestionData2 = function(req, res, next){
 		res.send(recObj);
 	}
 	else{//cache miss
-		MFDataSet.findOne({ unitid : req.params.cid }, function (err, recObj) {
-
-			if (!err) {
-				cache.set( "mf_"+req.params.cid, JSON.stringify(recObj));
-				res.send(recObj);
-			}
-			else{
-				console.log("Database Query Error: " + err);
-			}
-		});
+		var recObj = await MFDataSet.findOne({ UNITID : req.params.cid });
+		cache.set( "mf_"+req.params.cid, JSON.stringify(recObj));
+		res.send(recObj);
+			//console.log("Database Query Error: " + err);	
 	}
 }
 
@@ -296,7 +299,7 @@ exports.loadQuestionForm3 = function(req, res, next) {
 	res.render('question3', { collegeID : req.params.cid});
 }//*/
 
-exports.loadQuestionData3 = function(req, res, next){
+exports.loadQuestionData3 = async function(req, res, next){
 
 	var hit = cache.get("tu_"+req.params.cid);
 
@@ -305,14 +308,13 @@ exports.loadQuestionData3 = function(req, res, next){
 		res.send(recObj);
 	}
 	else{//cache miss
-		TuitionDataSet.findOne({ unitid : req.params.cid}, function (err, recObj){
-			cache.set( "tu_"+req.params.cid, JSON.stringify(recObj));
-			res.send(recObj);
-		});
+		var recObj = await TuitionDataSet.findOne({ UNITID : req.params.cid});
+		cache.set( "tu_"+req.params.cid, JSON.stringify(recObj));
+		res.send(recObj);
 	}
 }
 
-exports.loadQuestionForm2List = function(req, res, next){
+exports.loadQuestionForm2List = async function(req, res, next){
 	var hit = cache.get("default");
 
 	if ( hit != undefined){//cache hit
@@ -320,15 +322,14 @@ exports.loadQuestionForm2List = function(req, res, next){
 		res.render('question2List', collegeList);
 	}
 	else{//cache miss
-		CollegeList.find({}, function(err, resultsArr){
-			var collegeList = { resultSet: resultsArr};
-			cache.set( "default", JSON.stringify(collegeList));
-			res.render('question2List', collegeList);
-		});
+		var resultsArr = await CollegeList.find({});
+		var collegeList = { resultSet: resultsArr};
+		cache.set( "default", JSON.stringify(collegeList));
+		res.render('question2List', collegeList);
 	}
 }
 
-exports.loadQuestionForm3List = function(req, res, next) {
+exports.loadQuestionForm3List = async function(req, res, next) {
 	var hit = cache.get("default");
 
 	if ( hit != undefined){//cache hit
@@ -336,10 +337,9 @@ exports.loadQuestionForm3List = function(req, res, next) {
 		res.render('question3List', collegeList);
 	}
 	else{//cache miss
-		CollegeList.find({}, function(err, resultsArr){
-			var collegeList = { resultSet: resultsArr};
-			cache.set( "default", JSON.stringify(collegeList));
-			res.render('question3List', collegeList);
-		});
+		var resultsArr = await CollegeList.find({});
+		var collegeList = { resultSet: resultsArr};
+		cache.set( "default", JSON.stringify(collegeList));
+		res.render('question3List', collegeList);
 	}
 }
