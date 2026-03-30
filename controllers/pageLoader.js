@@ -16,6 +16,7 @@ var cache = LRU(options);
 
 var records = new Array();
 var records = [];
+console.log(process.env.DB_USER);
 var dbOptions = {
 	user: process.env.DB_USER,//'heroku_9dlrrxv3',//public
 	pass: process.env.DB_PASSWORD//'2v9f48c2rq5lunt1dilf9em2gn'//burrito_c@Nd!_yYz^
