@@ -16,17 +16,19 @@ var cache = LRU(options);
 
 var records = new Array();
 var records = [];
-console.log(process.env.DB_USER);
+
+var dbHost = process.env.DB_HOST;
+var dbAuthSource = process.env.DB_AUTH_SRC;
 var dbOptions = {
-	user: process.env.DB_USER,//'heroku_9dlrrxv3',//public
-	pass: process.env.DB_PASSWORD//'2v9f48c2rq5lunt1dilf9em2gn'//burrito_c@Nd!_yYz^
+	user: process.env.DB_USER,
+	pass: process.env.DB_PASSWORD
 }
 
 //Connect to mongoDB
-//mongoose.connect('mongodb://ds057254.mongolab.com:57254/heroku_9dlrrxv3', dbOptions);
 //mongoose.connect("mongodb://ricardoterrazas.com:27017/IS219", dbOptions);
-mongoose.connect("mongodb://localhost:27017/IS219", dbOptions);
-var mongoCLIURI = `mongodb://${dbOptions.user}:${dbOptions.pass}@localhost:27017/IS219?authSource=IS219`;
+
+mongoose.connect(`mongodb://${dbHost}:27017/IS219?authSource=${dbAuthSource}`, dbOptions);
+var mongoCLIURI = `mongodb://${dbOptions.user}:${dbOptions.pass}@${dbHost}:27017/IS219?authSource=${dbAuthSource}`;
 var mongoClientConnector = new MongoClient(mongoCLIURI);
 
 var db = mongoose.connection;
