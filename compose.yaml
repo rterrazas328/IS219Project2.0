@@ -7,8 +7,8 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - "db_data:/data/db"
-      - "./backup:/backup"
+      - db_data:/data/db
+      - db_backup:/backup
     healthcheck:
       test: >
         mongosh --db IS219 --username "$(cat $MONGO_INITDB_ROOT_USERNAME_FILE)" --password "$(cat $MONGO_INITDB_ROOT_PASSWORD_FILE)" --authenticationDatabase "admin" --eval 'db.adminCommand("ping")'
@@ -46,3 +46,4 @@ secrets:
 
 volumes:
   db_data:
+  db_backup:
